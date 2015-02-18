@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //Error handling routine.
 int FtdiNand::error(const char *err) {
 	printf("Error at %s: %s\n", err, ftdi_get_error_string(&m_ftdi));
-	exit(0); //Dirty. Disable to continue after errors.
+//	exit(0); //Dirty. Disable to continue after errors.
 	return 0;
 }
 
@@ -43,6 +43,8 @@ int FtdiNand::nandRead(int cl, int al, char *buf, int count) {
 	unsigned char *ftdata=new unsigned char[count*2];
 	int x, i, ret;
 	i=0;
+    
+
 	//Construct read commands. First one sets the cl and al lines too, rest just reads.
 	for (x=0; x<count; x++) {
 		if (x==0) {
@@ -54,11 +56,8 @@ int FtdiNand::nandRead(int cl, int al, char *buf, int count) {
 			cmds[i++]=0;
 		}
 	}
-	cmds[i++]=SEND_IMMEDIATE;
 
-//	printf("Cmd:\n");
-//	for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
-//	printf("\n\n");
+    cmds[i++]=SEND_IMMEDIATE;
 
 
 	if (ftdi_write_data(&m_ftdi, cmds, i)<0) return error("writing cmd");
@@ -99,6 +98,11 @@ int FtdiNand::nandWrite(int cl, int al, char *buf, int count) {
 		}
 		cmds[i++]=buf[x];
 	}
+   printf("nandWrite Buf: ");
+    for (x=0; x<count; x++) printf("%02hhx %s", buf[x], ((x&15)==15)?"\n":"");
+    printf("\n");
+printf("Cmd:\n");
+    for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
 
 //	printf("Cmd:\n");
 //	for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
@@ -154,10 +158,29 @@ int FtdiNand::sendCmd(char cmd) {
 int FtdiNand::sendAddr(long long addr, int noBytes) {
 	unsigned char buff[10];
 	int x;
+    printf("\nsendAddr addr:  %lld\n", addr);
 	for (x=0; x<noBytes; x++) {
 		buff[x]=addr&0xff;
 		addr=addr>>8;
 	}
+    
+   //  buff[0] = addr & 0xff;
+  //   buff[1] = (addr >> 8)  & 0xff;
+   //  buff[2] = (addr >> 16) & 0xff;
+   //  buff[3] = (addr >> 24) & 0xff;
+  //   buff[4] = (addr >> 32) & 0xff;
+ //    buff[4] = buff[4] - 0xff;
+
+    
+//    buff[4] = 0x10;
+    
+
+    
+    printf("sendAddr noBytes:  %i\n", noBytes);
+    printf("sendAddr Buf:  ");
+    for (x=0; x<noBytes; x++) printf("%02hhx %s", buff[x], ((x&15)==15)?"\n":"");
+    printf("\n");
+
 	return nandWrite(0, 1, (char*) buff, noBytes);
 }
 

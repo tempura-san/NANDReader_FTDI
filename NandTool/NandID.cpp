@@ -172,9 +172,9 @@ NandID::NandID(FtdiNand *fn, unsigned char *idBytes) {
 	
 	m_nandDesc=m_devCodes[x].name;
 
-	unsigned char onfi[4]={0};
+	//unsigned char onfi[4]={0};
 	fn->sendCmd(NAND_CMD_READID);
-	fn->sendAddr(0x20, 1);
+	/*fn->sendAddr(0x20, 1);
 	fn->readData((char *)onfi, 4);
 	m_onfib=(onfi[0]=='O' && onfi[1]=='N' && onfi[2]=='F' && onfi[3]=='I')?true:false;
 	if (m_onfib)
@@ -186,6 +186,8 @@ NandID::NandID(FtdiNand *fn, unsigned char *idBytes) {
 		if (m_onfi.rev.magic==0x49464E4F) m_onfib=true;
 		else m_onfib=false;
 	}
+     */
+    m_onfib=false;
 	m_nandChipSzMB=m_devCodes[x].chipsizeMB;
 	m_nandIsLP=((m_devCodes[x].options&LP_OPTIONS)!=0);
 	/*if (m_devCodes[x].pagesize!=0) {
