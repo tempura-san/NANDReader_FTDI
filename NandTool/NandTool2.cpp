@@ -133,9 +133,9 @@ int x, r;
                 // http://www.micron.com/~/media/Documents/Products/Technical%20Note/NAND%20Flash/tn2901.pdf
                 // See page 6.
 
-                nand.m_fn->sendCmd(NAND_CMD_READ0); //0x00  READ LATCH
-                nand.m_fn->sendAddr(0, m_id->getAddrByteCount());
-                nand.m_fn->sendCmd(NAND_CMD_READSTART);
+                nand.m_fn->sendCmd(0x00); //0x00  READ LATCH
+                nand.m_fn->sendAddr(0, 5);  // 5 bytes of addr to send... ALL ZERO, FUCK YOU
+                nand.m_fn->sendCmd(0x30);
                 nand.m_fn->waitReady();
 
 
