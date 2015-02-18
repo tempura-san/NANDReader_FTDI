@@ -133,16 +133,16 @@ int x, r;
                 // http://www.micron.com/~/media/Documents/Products/Technical%20Note/NAND%20Flash/tn2901.pdf
                 // See page 6.
 
-                m_ft->sendCmd(NAND_CMD_READ0); //0x00  READ LATCH
-                m_ft->sendAddr(0, m_id->getAddrByteCount());
-                m_ft->sendCmd(NAND_CMD_READSTART);
-                m_ft->waitReady();
+                nand.m_fn->sendCmd(NAND_CMD_READ0); //0x00  READ LATCH
+                nand.m_fn->sendAddr(0, m_id->getAddrByteCount());
+                nand.m_fn->sendCmd(NAND_CMD_READSTART);
+                nand.m_fn->waitReady();
 
 
 		for (x=0; x<pages; x++) {
-                    m_ft->sendCmd(0x31); // CMD READ CACHE
-                    m_ft->waitReady();
-                    r = m_ft->readData(pageBuf, 2112);
+                    nand.m_fn->sendCmd(0x31); // CMD READ CACHE
+                    nand.m_fn->waitReady();
+                    r = nand.m_fn->readData(pageBuf, 2112);
                     if (r!=2112) {
                         perror("error reading data from flash");
                         exit(1);

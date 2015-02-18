@@ -21,7 +21,7 @@ public:
 	int readPage(int page, char *buff, int count, AccessType access);
 	int writePage(int page, char *buff, int count, AccessType access);
 	NandID *getIdPtr();
-private:
+public:
 	FtdiNand *m_fn;
 	NandID *m_id;
 	NandData *m_data;
