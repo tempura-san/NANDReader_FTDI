@@ -2,12 +2,7 @@ CC = /usr/bin/g++
 LD = /usr/bin/g++
 RM = /bin/rm
 
-ifeq ($(shell uname -s),Darwin)
-	LIBNAME=libftdi1
-else
-	LIBNAME=libftdi
-endif
-
+LIBNAME=libftdi1
 
 CFLAGS = -c -O3 -g -ggdb -Wall -Wextra -Wno-unused-parameter
 CFLAGS += $(shell pkg-config --cflags $(LIBNAME))
