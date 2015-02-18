@@ -148,7 +148,7 @@ int x, r;
                         exit(1);
                     }
 
-                    printf("READ: %d\n", bytesread);
+                    printf("READ: %d\n", r);
                     r=write(f, pageBuf, 2112);
                     if (r!=2112) {
                         perror("writing data to file");
