@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "NandDataLP.hpp"
 #include "NandCmds.h"
+#include <stdio.h>
 
 //Data interface for large-page NAND chips
 
