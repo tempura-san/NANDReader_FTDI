@@ -161,8 +161,14 @@ static int nand_id_len(unsigned char *id_data, int arrlen)
 //Constructor: construct NAND ID info from the 5 ID bytes read from the NAND.
 NandID::NandID(FtdiNand *fn, unsigned char *idBytes) {
 	int x;
-	for (x=0; x<8; x++) m_idBytes[x]=idBytes[x];
-	
+
+	printf("\nidBytes:");
+	for (x=0; x<8; x++) {
+		m_idBytes[x]=idBytes[x];
+		printf(" %02hhX", m_idBytes[x]);
+	}
+	printf("\n");
+
 	x=0;
 	while (m_devCodes[x].id!=0 && m_devCodes[x].id!=idBytes[1]) x++;
 	if (m_devCodes[x].id==0) {
