@@ -142,7 +142,7 @@ FtdiNand::~FtdiNand(void) {
 }
 
 unsigned char FtdiNand::status() {
-	unsigned char status;
+	unsigned char status = 0;
 	sendCmd(0x70); //NAND_CMD_STATUS
 	readData((char*)&status,1);
 	return status;
@@ -225,4 +225,5 @@ int FtdiNand::waitReady() {
 		printf("DOUBLE CHECK IF THE CHIP IS READ OR WRITTEN CORRECTLY!\n");
 		m_rbErrorCount=-1;
 	}
+	return 1;
 }
