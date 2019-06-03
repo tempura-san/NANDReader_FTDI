@@ -36,7 +36,7 @@ int NandDataLP::readPage(int pageno, char *buff, int max) {
     long long pageis;
     pageis = (long long) pageno << 16L;
     printf("\nPageNo 16L: %lld\n", pageis);
-	m_ft->sendAddr(pageno<<16L, m_id->getAddrByteCount());
+	m_ft->sendAddr(pageis, m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_READSTART);
 	m_ft->waitReady();
 	if (max>m_id->getPageSize()) max=m_id->getPageSize();
@@ -52,8 +52,10 @@ int NandDataLP::readPage(int pageno, char *buff, int max) {
 
 int NandDataLP::readOob(int pageno, char *buff, int max) {
 	//Read the OOB for a page
+	long long pageis;
+	pageis = (long long) pageno << 16L;
 	m_ft->sendCmd(NAND_CMD_READ0);
-	m_ft->sendAddr((pageno<<16L)+m_id->getPageSize(), m_id->getAddrByteCount());
+	m_ft->sendAddr(pageis+m_id->getPageSize(), m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_READSTART);
 	m_ft->waitReady();
 	if (max>m_id->getOobSize()) max=m_id->getOobSize();
@@ -62,8 +64,10 @@ int NandDataLP::readOob(int pageno, char *buff, int max) {
 
 int NandDataLP::writePage(int pageno, char *buff, int len) {
 	// Write page
+	long long pageis;
+	pageis = (long long) pageno << 16L;
 	m_ft->sendCmd(NAND_CMD_SEQIN);
-	m_ft->sendAddr(pageno<<16L, m_id->getAddrByteCount());
+	m_ft->sendAddr(pageis, m_id->getAddrByteCount());
 	m_ft->writeData(buff,len);
 	m_ft->sendCmd(NAND_CMD_PAGEPROG);
 	m_ft->waitReady();
