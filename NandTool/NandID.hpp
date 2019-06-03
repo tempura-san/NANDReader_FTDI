@@ -94,6 +94,7 @@ private:
 		int pagesize;
 		int chipsizeMB;
 		int erasesize;
+		int oobsize;
 		int options;
 		int addrcycles;
 	} DevCodes;

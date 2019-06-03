@@ -44,77 +44,77 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //Modified to get rid of the 16-bit devices: we don't support these.
 //Name. ID code, pagesize, chipsize in MegaByte, eraseblock size, options
 const NandID::DevCodes NandID::m_devCodes[]={
-	{"NAND 1MiB 5V 8-bit",		0x6e, 256, 1, 0x1000, 0, 3},
-	{"NAND 2MiB 5V 8-bit",		0x64, 256, 2, 0x1000, 0, 3},
-	{"NAND 4MiB 5V 8-bit",		0x6b, 512, 4, 0x2000, 0, 3},
-	{"NAND 1MiB 3,3V 8-bit",	0xe8, 256, 1, 0x1000, 0, 3},
-	{"NAND 1MiB 3,3V 8-bit",	0xec, 256, 1, 0x1000, 0, 3},
-	{"NAND 2MiB 3,3V 8-bit",	0xea, 256, 2, 0x1000, 0, 3},
-	{"NAND 4MiB 3,3V 8-bit",	0xd5, 512, 4, 0x2000, 0, 3},
-	{"NAND 4MiB 3,3V 8-bit",	0xe3, 512, 4, 0x2000, 0, 3},
-	{"NAND 4MiB 3,3V 8-bit",	0xe5, 512, 4, 0x2000, 0, 3},
-	{"NAND 8MiB 3,3V 8-bit",	0xd6, 512, 8, 0x2000, 0, 3},
-	{"NAND 8MiB 1,8V 8-bit",	0x39, 512, 8, 0x2000, 0, 3},
-	{"NAND 8MiB 3,3V 8-bit",	0xe6, 512, 8, 0x2000, 0, 3},
-	{"NAND 16MiB 1,8V 8-bit",	0x33, 512, 16, 0x4000, 0, 3},
-	{"NAND 16MiB 3,3V 8-bit",	0x73, 512, 16, 0x4000, 0, 3},
-	{"NAND 32MiB 1,8V 8-bit",	0x35, 512, 32, 0x4000, 0, 3},
-	{"NAND 32MiB 3,3V 8-bit",	0x75, 512, 32, 0x4000, 0, 3},
-	{"NAND 64MiB 1,8V 8-bit",	0x36, 512, 64, 0x4000, 0, 4},
-	{"NAND 64MiB 3,3V 8-bit",	0x76, 512, 64, 0x4000, 0, 4},
-	{"NAND 128MiB 1,8V 8-bit",	0x78, 512, 128, 0x4000, 0, 3},
-	{"NAND 128MiB 1,8V 8-bit",	0x39, 512, 128, 0x4000, 0, 3},
-	{"NAND 128MiB 3,3V 8-bit",	0x79, 512, 128, 0x4000, 0, 4},
-	{"NAND 256MiB 3,3V 8-bit",	0x71, 512, 256, 0x4000, 0, 4},
+	{"NAND 1MiB 5V 8-bit",		0x6e, 256, 1, 0x1000, 0, 0, 3},
+	{"NAND 2MiB 5V 8-bit",		0x64, 256, 2, 0x1000, 0, 0, 3},
+	{"NAND 4MiB 5V 8-bit",		0x6b, 512, 4, 0x2000, 0, 0, 3},
+	{"NAND 1MiB 3,3V 8-bit",	0xe8, 256, 1, 0x1000, 0, 0, 3},
+	{"NAND 1MiB 3,3V 8-bit",	0xec, 256, 1, 0x1000, 0, 0, 3},
+	{"NAND 2MiB 3,3V 8-bit",	0xea, 256, 2, 0x1000, 0, 0, 3},
+	{"NAND 4MiB 3,3V 8-bit",	0xd5, 512, 4, 0x2000, 0, 0, 3},
+	{"NAND 4MiB 3,3V 8-bit",	0xe3, 512, 4, 0x2000, 0, 0, 3},
+	{"NAND 4MiB 3,3V 8-bit",	0xe5, 512, 4, 0x2000, 0, 0, 3},
+	{"NAND 8MiB 3,3V 8-bit",	0xd6, 512, 8, 0x2000, 0, 0, 3},
+	{"NAND 8MiB 1,8V 8-bit",	0x39, 512, 8, 0x2000, 0, 0, 3},
+	{"NAND 8MiB 3,3V 8-bit",	0xe6, 512, 8, 0x2000, 0, 0, 3},
+	{"NAND 16MiB 1,8V 8-bit",	0x33, 512, 16, 0x4000, 0, 0, 3},
+	{"NAND 16MiB 3,3V 8-bit",	0x73, 512, 16, 0x4000, 0, 0, 3},
+	{"NAND 32MiB 1,8V 8-bit",	0x35, 512, 32, 0x4000, 0, 0, 3},
+	{"NAND 32MiB 3,3V 8-bit",	0x75, 512, 32, 0x4000, 0, 0, 3},
+	{"NAND 64MiB 1,8V 8-bit",	0x36, 512, 64, 0x4000, 0, 0, 4},
+	{"NAND 64MiB 3,3V 8-bit",	0x76, 512, 64, 0x4000, 0, 0, 4},
+	{"NAND 128MiB 1,8V 8-bit",	0x78, 512, 128, 0x4000, 0, 0, 3},
+	{"NAND 128MiB 1,8V 8-bit",	0x39, 512, 128, 0x4000, 0, 0, 3},
+	{"NAND 128MiB 3,3V 8-bit",	0x79, 512, 128, 0x4000, 0, 0, 4},
+	{"NAND 256MiB 3,3V 8-bit",	0x71, 512, 256, 0x4000, 0, 0, 4},
 
 	/* 512 Megabit */
-	{"NAND 64MiB 1,8V 8-bit",	0xA2, 0,  64, 0, LP_OPTIONS, 4},
-	{"NAND 64MiB 1,8V 8-bit",	0xA0, 0,  64, 0, LP_OPTIONS, 4},
-	{"NAND 64MiB 3,3V 8-bit",	0xF2, 0,  64, 0, LP_OPTIONS, 4},
-	{"NAND 64MiB 3,3V 8-bit",	0xD0, 0,  64, 0, LP_OPTIONS, 4},
-	{"NAND 64MiB 3,3V 8-bit",	0xF0, 0,  64, 0, LP_OPTIONS, 4},
+	{"NAND 64MiB 1,8V 8-bit",	0xA2, 0,  64, 0, 0, LP_OPTIONS, 4},
+	{"NAND 64MiB 1,8V 8-bit",	0xA0, 0,  64, 0, 0, LP_OPTIONS, 4},
+	{"NAND 64MiB 3,3V 8-bit",	0xF2, 0,  64, 0, 0, LP_OPTIONS, 4},
+	{"NAND 64MiB 3,3V 8-bit",	0xD0, 0,  64, 0, 0, LP_OPTIONS, 4},
+	{"NAND 64MiB 3,3V 8-bit",	0xF0, 0,  64, 0, 0, LP_OPTIONS, 4},
 
 	/* 1 Gigabit */
-	{"NAND 128MiB 1,8V 8-bit",	0xA1, 0, 128, 0, LP_OPTIONS, 4},
-	{"NAND 128MiB 3,3V 8-bit",	0xF1, 0, 128, 0, LP_OPTIONS, 4},
-	{"NAND 128MiB 3,3V 8-bit",	0xD1, 0, 128, 0, LP_OPTIONS, 4},
+	{"NAND 128MiB 1,8V 8-bit",	0xA1, 0, 128, 0, 0, LP_OPTIONS, 4},
+	{"NAND 128MiB 3,3V 8-bit",	0xF1, 0, 128, 0, 0, LP_OPTIONS, 4},
+	{"NAND 128MiB 3,3V 8-bit",	0xD1, 0, 128, 0, 0, LP_OPTIONS, 4},
 
 	/* 2 Gigabit */
-	{"NAND 256MiB 1,8V 8-bit",	0xAA, 0, 256, 0, LP_OPTIONS, 5},
-	{"NAND 256MiB 3,3V 8-bit",	0xDA, 0, 256, 0, LP_OPTIONS, 5},
+	{"NAND 256MiB 1,8V 8-bit",	0xAA, 0, 256, 0, 0, LP_OPTIONS, 5},
+	{"NAND 256MiB 3,3V 8-bit",	0xDA, 0, 256, 0, 0, LP_OPTIONS, 5},
 
 	/* 4 Gigabit */
-	{"NAND 512MiB 1,8V 8-bit",	0xAC, 0, 512, 0, LP_OPTIONS, 5},
-	{"NAND 512MiB 3,3V 8-bit",	0xDC, 0, 512, 0, LP_OPTIONS, 5},
+	{"NAND 512MiB 1,8V 8-bit",	0xAC, 0, 512, 0, 0, LP_OPTIONS, 5},
+	{"NAND 512MiB 3,3V 8-bit",	0xDC, 0, 512, 0, 0, LP_OPTIONS, 5},
 
 	/* 8 Gigabit */
-	{"NAND 1GiB 1,8V 8-bit",	0xA3, 0, 1024, 0, LP_OPTIONS, 5},
-	{"NAND 1GiB 3,3V 8-bit",	0xD3, 0, 1024, 0, LP_OPTIONS, 5},
+	{"NAND 1GiB 1,8V 8-bit",	0xA3, 0, 1024, 0, 0, LP_OPTIONS, 5},
+	{"NAND 1GiB 3,3V 8-bit",	0xD3, 0, 1024, 0, 0, LP_OPTIONS, 5},
 
 	/* 16 Gigabit */
-	{"NAND 2GiB 1,8V 8-bit",	0xA5, 0, 2048, 0, LP_OPTIONS, 5},
-	{"NAND 2GiB 3,3V 8-bit",	0xD5, 0, 2048, 0, LP_OPTIONS, 5},
+	{"NAND 2GiB 1,8V 8-bit",	0xA5, 0, 2048, 0, 0, LP_OPTIONS, 5},
+	{"NAND 2GiB 3,3V 8-bit",	0xD5, 0, 2048, 0, 0, LP_OPTIONS, 5},
 
 	/* 32 Gigabit */
-	{"NAND 4GiB 1,8V 8-bit",	0xA7, 0, 4096, 0, LP_OPTIONS, 5},
-	{"NAND 4GiB 3,3V 8-bit",	0xD7, 0, 4096, 0, LP_OPTIONS, 5},
+	{"NAND 4GiB 1,8V 8-bit",	0xA7, 0, 4096, 0, 0, LP_OPTIONS, 5},
+	{"NAND 4GiB 3,3V 8-bit",	0xD7, 0, 4096, 0, 0, LP_OPTIONS, 5},
 
 	/* 64 Gigabit */
-	{"NAND 8GiB 1,8V 8-bit",	0xAE, 0, 8192, 0, LP_OPTIONS, 5},
-	{"NAND 8GiB 3,3V 8-bit",	0xDE, 0, 8192, 0, LP_OPTIONS, 5},
+	{"NAND 8GiB 1,8V 8-bit",	0xAE, 0, 8192, 0, 0, LP_OPTIONS, 5},
+	{"NAND 8GiB 3,3V 8-bit",	0xDE, 0, 8192, 0, 0, LP_OPTIONS, 5},
 
 	/* 128 Gigabit */
-	{"NAND 16GiB 1,8V 8-bit",	0x1A, 0, 16384, 0, LP_OPTIONS, 5},
-	{"NAND 16GiB 3,3V 8-bit",	0x3A, 0, 16384, 0, LP_OPTIONS, 5},
+	{"NAND 16GiB 1,8V 8-bit",	0x1A, 0, 16384, 0, 0, LP_OPTIONS, 5},
+	{"NAND 16GiB 3,3V 8-bit",	0x3A, 0, 16384, 0, 0, LP_OPTIONS, 5},
 
 	/* 256 Gigabit */
-	{"NAND 32GiB 1,8V 8-bit",	0x1C, 0, 32768, 0, LP_OPTIONS, 6},
-	{"NAND 32GiB 3,3V 8-bit",	0x3C, 0, 32768, 0, LP_OPTIONS, 6},
+	{"NAND 32GiB 1,8V 8-bit",	0x1C, 0, 32768, 0, 0, LP_OPTIONS, 6},
+	{"NAND 32GiB 3,3V 8-bit",	0x3C, 0, 32768, 0, 0, LP_OPTIONS, 6},
 
 	/* 512 Gigabit */
-	{"NAND 64GiB 1,8V 8-bit",	0x1E, 0, (int)65536, 0, LP_OPTIONS, 6},
-	{"NAND 64GiB 3,3V 8-bit",	0x3E, 0, (int)65536, 0, LP_OPTIONS, 6},
-	{"", 0, 0, 0, 0, 0, 0}
+	{"NAND 64GiB 1,8V 8-bit",	0x1E, 0, (int)65536, 0, 0, LP_OPTIONS, 6},
+	{"NAND 64GiB 3,3V 8-bit",	0x3E, 0, (int)65536, 0, 0, LP_OPTIONS, 6},
+	{"", 0, 0, 0, 0, 0, 0, 0}
 };
 
 static int nand_id_has_period(unsigned char *id_data, int arrlen, int period)
@@ -304,7 +304,10 @@ NandID::NandID(FtdiNand *fn, unsigned char *idBytes) {
 	{
 			m_nandPageSz = m_devCodes[x].pagesize;
 			m_nandEraseSz = m_devCodes[x].erasesize;
-			m_nandOobSz = m_nandPageSz / 32;
+			if(m_devCodes[x].oobsize != 0)
+				m_nandOobSz = m_devCodes[x].oobsize;
+			else
+				m_nandOobSz = m_nandPageSz/32;
 			m_nandbw = m_devCodes[x].options & NAND_BUSWIDTH_16;
 	}	
 	
