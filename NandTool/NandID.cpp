@@ -308,15 +308,21 @@ NandID::NandID(FtdiNand *fn, unsigned char *idBytes) {
 	sprintf(buff, "Unknown (%hhx)", idBytes[0]);
 	m_nandManuf=buff;
 	if (idBytes[0]==0x98) m_nandManuf="Toshiba";
+	if (idBytes[0]==0xc8) m_nandManuf="ESMT";
 	if (idBytes[0]==0xec) m_nandManuf="Samsung";
 	if (idBytes[0]==0x04) m_nandManuf="Fujitsu";
-	if (idBytes[0]==0x8f) m_nandManuf="National Semiconductors";
+	if (idBytes[0]==0x8f) m_nandManuf="National Semiconductor";
 	if (idBytes[0]==0x07) m_nandManuf="Renesas";
 	if (idBytes[0]==0x20) m_nandManuf="ST Micro";
 	if (idBytes[0]==0xad) m_nandManuf="Hynix";
 	if (idBytes[0]==0x2c) m_nandManuf="Micron";
-	if (idBytes[0]==0x01) m_nandManuf="AMD";
+	if (idBytes[0]==0x01) m_nandManuf="AMD/Spansion";
 	if (idBytes[0]==0xc2) m_nandManuf="Macronix";
+	if (idBytes[0]==0x92) m_nandManuf="Eon";
+	if (idBytes[0]==0x45) m_nandManuf="Sandisk";
+	if (idBytes[0]==0x89) m_nandManuf="Intel";
+	if (idBytes[0]==0x9b) m_nandManuf="ATO";
+	if (idBytes[0]==0xef) m_nandManuf="Winbond";
 }
 
 string NandID::getDesc() {
