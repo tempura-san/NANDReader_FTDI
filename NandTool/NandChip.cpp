@@ -27,12 +27,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <cstdlib>
+#include <unistd.h>
 #include "NandCmds.h"
 
 NandChip::NandChip(FtdiNand *fn) {
 	unsigned char id[8];
 	m_fn=fn;
 	//Try to read the 5 NAND ID-bytes and create the ID-object
+	m_fn->sendCmd(NAND_CMD_RESET);
+	usleep(10000);
 	m_fn->sendCmd(NAND_CMD_READID);
 	m_fn->sendAddr(0, 1);
 	m_fn->readData((char *)id, 8);
