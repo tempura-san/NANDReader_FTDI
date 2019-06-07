@@ -44,6 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //Modified to get rid of the 16-bit devices: we don't support these.
 //Name. ID code, pagesize, chipsize in MegaByte, eraseblock size, options
 const NandID::DevCodes NandID::m_devCodes[]={
+	{"TC58NVG6D2G 8GiB 3,3V 8-bit", 0xDE, 8192, 8248, 0x200000, 640, LP_OPTIONS, 5},
 	{"H27UCG8T2ATR-BC 8GiB 3,3V 8-bit", 0xDE, 8192, 8360, 0x200000, 640, LP_OPTIONS, 5},
 	{"TC58NVG5D2FTAI0 4GiB 3,3V 8-bit",	0xD7, 8192, 4096, 0x100000, 448, LP_OPTIONS, 5},
 	{"JS29F16G08AAMC1 2GiB 3,3V 8-bit",	0xD5, 4096, 2048, 0x80000, 218, LP_OPTIONS, 5},
