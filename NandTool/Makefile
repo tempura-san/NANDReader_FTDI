@@ -1,6 +1,6 @@
 CC = /usr/bin/g++
 LD = /usr/bin/g++
-RM = /bin/rm
+RM = /bin/rm -f
 
 LIBNAME=libftdi1
 
