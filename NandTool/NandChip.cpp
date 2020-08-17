@@ -59,13 +59,12 @@ NandChip::~NandChip()
 
 void NandChip::showInfo()
 {
-	//Dump some info.
-	printf("Nand type: %s\n", m_id->getDesc().c_str());
+	printf("NAND type:    %s\n", m_id->getDesc().c_str());
 	printf("Manufacturer: %s\n", m_id->getManufacturer().c_str());
-	printf("ID: %02X\n", m_id->getID()[1]);
-	printf("Chip: %02X\n", m_id->getID()[2]);
-	printf("Size: %iMB, pagesize %i bytes, OOB size %i bytes\n", m_id->getSizeMB(), m_id->getPageSize(), m_id->getOobSize());
-	printf("%s page, needs %i addr bytes.\n", m_id->isLargePage() ? "Large" : "Small", m_id->getAddrByteCount());
+	printf("Device ID:    %02X\n", m_id->getID()[1]);
+	printf("Chip info:    %02X\n", m_id->getID()[2]);
+	printf("Chip size:    %iMB (pagesize: %i, OOB: %i)\n", m_id->getSizeMB(), m_id->getPageSize(), m_id->getOobSize());
+	printf("%s page detected, needs %i address bytes.\n", m_id->isLargePage() ? "Large" : "Small", m_id->getAddrByteCount());
 }
 
 int NandChip::readPage(int page, char *buff, int count, NandChip::AccessType access)

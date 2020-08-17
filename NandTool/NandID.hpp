@@ -103,7 +103,7 @@ private:
 	} DevCodes;
 
 	static const DevCodes m_devCodes[];
-	unsigned char m_idBytes[8];
+	unsigned char m_idBytes[5];
 
 	string m_nandManuf;
 	string m_nandDesc;

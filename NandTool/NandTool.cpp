@@ -57,7 +57,11 @@ int main(int argc, _TCHAR *argv[])
 		actionVerify
 	};
 
-	printf("FT2232H-based NAND reader");
+	printf("FT2232H-based NAND reader\n");
+	printf("---------------------------\n");
+	printf("Original work: (c)2012 Jeroen Domburg (jeroen AT spritesmods.com)\n");
+	printf("Additions:     (c)2014 Bjoern Kerler (info AT revskills.de)\n");
+	printf("               and others\n\n");
 
 	//Parse command line options
 	Action action = actionNone;
