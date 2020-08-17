@@ -7,6 +7,9 @@ LIBNAME=libftdi1
 CFLAGS = -c -O3 -g -ggdb -Wall -Wextra
 CFLAGS += $(shell pkg-config --cflags $(LIBNAME))
 
+# uncomment next line for debugging output
+#CFLAGS += -DDEBUG
+
 LDFLAGS = $(shell pkg-config --libs $(LIBNAME))
 
 BIN = NandTool
@@ -16,7 +19,7 @@ OBJS := $(SRCS:.cpp=.o)
 all: $(BIN)
 
 .cpp.o: %.cpp
-	$(CC) $(CFLAGS) $< -o $@ 
+	$(CC) $(CFLAGS) $< -o $@
 
 $(BIN): $(OBJS)
 	$(LD) -o $(BIN) $(OBJS) $(LDFLAGS)
