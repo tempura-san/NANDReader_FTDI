@@ -173,7 +173,7 @@ int main(int argc, _TCHAR *argv[])
 			exit(1);
 		}
 		NandID *id = nand.getIdPtr();
-		long pages = (id->getSizeMB() * 1024LL * 1024LL) / id->getPageSize();
+		unsigned long pages = (id->getSizeMB() * 1024LL * 1024LL) / id->getPageSize();
 		int size = 0;
 		if (access == NandChip::accessMain)
 			size = id->getPageSize();
@@ -181,14 +181,17 @@ int main(int argc, _TCHAR *argv[])
 			size = id->getOobSize();
 		if (access == NandChip::accessBoth)
 			size = id->getOobSize() + id->getPageSize();
+
 		char *pageBuf = new char[size];
 		char *verifyBuf = new char[size];
-		int verifyErrors = 0;
+		unsigned int verifyErrors = 0;
+
 		nand.showInfo();
+
 		printf("%sing %li pages of %i bytes...\n", action == actionRead ? "Read" : "Verify", pages, id->getPageSize());
-		for (x = 0; x < pages; x++)
+		for (unsigned long page = 0; page < pages; page++)
 		{
-			nand.readPage(x, pageBuf, size, access);
+			nand.readPage(page, pageBuf, size, access);
 			if (action == actionRead)
 			{
 				r = write(f, pageBuf, size);
@@ -211,18 +214,19 @@ int main(int argc, _TCHAR *argv[])
 					if (verifyBuf[y] != pageBuf[y])
 					{
 						verifyErrors++;
-						printf("Verify error: Page %i, byte %i: file 0x%02hhX flash 0x%02hhX\n", x, y, verifyBuf[y], pageBuf[y]);
+						printf("Verification error: Page %li, byte %i: file 0x%02hhX flash 0x%02hhX\n", page, y, verifyBuf[y], pageBuf[y]);
 					}
 				}
 			}
-			if ((x & 15) == 0)
+			if (((page & 15) == 0) || (page == pages - 1))
 			{
-				printf("%i/%li\n\033[A", x, pages);
+				printf("Progress: Page number %li of %li (%li%%)\n\033[A", (page + 1), pages, (page + 1) * 100 / pages);
 			}
 		}
+		printf("\n");
 		if (action == actionVerify)
 		{
-			printf("Verify: %i bytes differ between NAND and file.\n", verifyErrors);
+			printf("Verification result: %i bytes differ between NAND content and '%s'.\n", verifyErrors, file.c_str());
 		}
 	}
 
