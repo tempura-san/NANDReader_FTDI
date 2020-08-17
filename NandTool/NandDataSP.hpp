@@ -5,7 +5,8 @@
 
 using namespace std;
 
-class NandDataSP: public NandData {
+class NandDataSP : public NandData
+{
 public:
 	NandDataSP(FtdiNand *ftdi, NandID *id);
 	virtual int readPage(int pageno, char *buf, int max);
@@ -13,6 +14,5 @@ public:
 	virtual int writePage(int pageno, char *buf, int len);
 	virtual int eraseBlock(int block);
 };
-
 
 #endif

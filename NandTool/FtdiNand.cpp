@@ -31,49 +31,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ADR_AL 0x80
 
 //Error handling routine.
-int FtdiNand::error(const char *err) {
+int FtdiNand::error(const char *err)
+{
 	printf("Error at %s: %s\n", err, ftdi_get_error_string(&m_ftdi));
-//	exit(0); //Dirty. Disable to continue after errors.
+	//	exit(0); //Dirty. Disable to continue after errors.
 	return 0;
 }
 
 //Read bytes from the nand, with the cl and al lines set as indicated.
-int FtdiNand::nandRead(int cl, int al, char *buf, int count) {
-	unsigned char *cmds=new unsigned char[count*2+2];
-	unsigned char *ftdata=new unsigned char[count*2];
+int FtdiNand::nandRead(int cl, int al, char *buf, int count)
+{
+	unsigned char *cmds = new unsigned char[count * 2 + 2];
+	unsigned char *ftdata = new unsigned char[count * 2];
 	int x, i, ret;
-	i=0;
-    
+	i = 0;
 
 	//Construct read commands. First one sets the cl and al lines too, rest just reads.
-	for (x=0; x<count; x++) {
-		if (x==0) {
-			cmds[i++]=READ_EXTENDED;
-			cmds[i++]=(cl?ADR_CL:0)|(al?ADR_AL:0);
-			cmds[i++]=0;
-		} else {
-			cmds[i++]=READ_SHORT;
-			cmds[i++]=0;
+	for (x = 0; x < count; x++)
+	{
+		if (x == 0)
+		{
+			cmds[i++] = READ_EXTENDED;
+			cmds[i++] = (cl ? ADR_CL : 0) | (al ? ADR_AL : 0);
+			cmds[i++] = 0;
+		}
+		else
+		{
+			cmds[i++] = READ_SHORT;
+			cmds[i++] = 0;
 		}
 	}
 
-    cmds[i++]=SEND_IMMEDIATE;
+	cmds[i++] = SEND_IMMEDIATE;
 
-
-	if (ftdi_write_data(&m_ftdi, cmds, i)<0) return error("writing cmd");
-	if (m_slowAccess) {
+	if (ftdi_write_data(&m_ftdi, cmds, i) < 0)
+		return error("writing cmd");
+	if (m_slowAccess)
+	{
 		//Div by 5 mode makes the ftdi-chip return all databytes double. Compensate for that.
-		ret=ftdi_read_data(&m_ftdi, ftdata, count*2);
-		for (x=0; x<count; x++) buf[x]=ftdata[x*2];
-		ret/=2;
-	} else {
-		ret=ftdi_read_data(&m_ftdi, ftdata, count);
-		for (x=0; x<count; x++) buf[x]=ftdata[x];
+		ret = ftdi_read_data(&m_ftdi, ftdata, count * 2);
+		for (x = 0; x < count; x++)
+			buf[x] = ftdata[x * 2];
+		ret /= 2;
+	}
+	else
+	{
+		ret = ftdi_read_data(&m_ftdi, ftdata, count);
+		for (x = 0; x < count; x++)
+			buf[x] = ftdata[x];
 	}
 
-	if (ret<0) return error("reading data");
-	if (ret<count) return error("short read");
-//	printf("%i bytes read.\n", ret);
+	if (ret < 0)
+		return error("reading data");
+	if (ret < count)
+		return error("short read");
+	//	printf("%i bytes read.\n", ret);
 
 	delete[] cmds;
 	delete[] ftdata;
@@ -81,116 +93,139 @@ int FtdiNand::nandRead(int cl, int al, char *buf, int count) {
 }
 
 //Write bytes to the nand, with al/cl set as indicated.
-int FtdiNand::nandWrite(int cl, int al, char *buf, int count) {
-	unsigned char *cmds=new unsigned char[count*3+1];
+int FtdiNand::nandWrite(int cl, int al, char *buf, int count)
+{
+	unsigned char *cmds = new unsigned char[count * 3 + 1];
 	int x, i;
-	i=0;
+	i = 0;
 
 	//Construct write commands. First one sets the cl and al lines too, rest just reads.
-	for (x=0; x<count; x++) {
-		if (x==0) {
-			cmds[i++]=WRITE_EXTENDED;
-			cmds[i++]=(cl?ADR_CL:0)|(al?ADR_AL:0);
-			cmds[i++]=0;
-		} else {
-			cmds[i++]=WRITE_SHORT;
-			cmds[i++]=0;
+	for (x = 0; x < count; x++)
+	{
+		if (x == 0)
+		{
+			cmds[i++] = WRITE_EXTENDED;
+			cmds[i++] = (cl ? ADR_CL : 0) | (al ? ADR_AL : 0);
+			cmds[i++] = 0;
 		}
-		cmds[i++]=buf[x];
+		else
+		{
+			cmds[i++] = WRITE_SHORT;
+			cmds[i++] = 0;
+		}
+		cmds[i++] = buf[x];
 	}
-   printf("nandWrite Buf: ");
-    for (x=0; x<count; x++) printf("%02hhx %s", buf[x], ((x&15)==15)?"\n":"");
-    printf("\n");
-printf("Cmd:\n");
-    for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
+	printf("nandWrite Buf: ");
+	for (x = 0; x < count; x++)
+		printf("%02hhx %s", buf[x], ((x & 15) == 15) ? "\n" : "");
+	printf("\n");
+	printf("Cmd:\n");
+	for (x = 0; x < i; x++)
+		printf("%02hhx %s", cmds[x], ((x & 15) == 15) ? "\n" : "");
 
-//	printf("Cmd:\n");
-//	for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
-//	printf("\n\n");
+	//	printf("Cmd:\n");
+	//	for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
+	//	printf("\n\n");
 
-	if (ftdi_write_data(&m_ftdi, cmds, i)<0) return error("writing cmd");
+	if (ftdi_write_data(&m_ftdi, cmds, i) < 0)
+		return error("writing cmd");
 	delete[] cmds;
 	return count;
 }
 
-FtdiNand::FtdiNand() {
-	m_rbErrorCount=0;
+FtdiNand::FtdiNand()
+{
+	m_rbErrorCount = 0;
 }
 
 //Try to find the ftdi chip and open it.
-int FtdiNand::open(int vid, int pid, bool doslow) {
-	unsigned char slow=DIS_DIV_5;
-	if (doslow) slow=EN_DIV_5;
-	m_slowAccess=doslow;
+int FtdiNand::open(int vid, int pid, bool doslow)
+{
+	unsigned char slow = DIS_DIV_5;
+	if (doslow)
+		slow = EN_DIV_5;
+	m_slowAccess = doslow;
 	//If vid/pid is zero, use default FT2232H vid/pid.
-	if (vid==0) vid=0x0403;
-	if (pid==0) pid=0x6010;
+	if (vid == 0)
+		vid = 0x0403;
+	if (pid == 0)
+		pid = 0x6010;
 	//Open FTDI communications
-	if (ftdi_init(&m_ftdi)<0) return error("init");
-	if (ftdi_usb_open(&m_ftdi, vid, pid)<0) return error("open");
-	if (ftdi_set_bitmode(&m_ftdi, 0, BITMODE_MCU)<0) error("bitmode");
-	if (ftdi_write_data(&m_ftdi, &slow, 1)<0) return error("writing div5 cmd");
-	if (ftdi_set_latency_timer(&m_ftdi, 1)<0) return error("setting latency");
+	if (ftdi_init(&m_ftdi) < 0)
+		return error("init");
+	if (ftdi_usb_open(&m_ftdi, vid, pid) < 0)
+		return error("open");
+	if (ftdi_set_bitmode(&m_ftdi, 0, BITMODE_MCU) < 0)
+		error("bitmode");
+	if (ftdi_write_data(&m_ftdi, &slow, 1) < 0)
+		return error("writing div5 cmd");
+	if (ftdi_set_latency_timer(&m_ftdi, 1) < 0)
+		return error("setting latency");
 	ftdi_usb_purge_buffers(&m_ftdi);
 	return 1;
 }
 
 //Destructor: Close everything.
-FtdiNand::~FtdiNand(void) {
+FtdiNand::~FtdiNand(void)
+{
 	ftdi_usb_close(&m_ftdi);
 	ftdi_deinit(&m_ftdi);
 }
 
-unsigned char FtdiNand::status() {
+unsigned char FtdiNand::status()
+{
 	unsigned char status = 0;
 	sendCmd(0x70); //NAND_CMD_STATUS
-	readData((char*)&status,1);
+	readData((char *)&status, 1);
 	return status;
 }
 
 //Send a command to the NAND chip
-int FtdiNand::sendCmd(char cmd) {
+int FtdiNand::sendCmd(char cmd)
+{
 	return nandWrite(1, 0, &cmd, 1);
 }
 
 //Send an address to the NAND. addr is the address and it is send
 //as noBytes bytes. (the amount of bytes differs between flash types.)
-int FtdiNand::sendAddr(long long addr, int noBytes) {
+int FtdiNand::sendAddr(long long addr, int noBytes)
+{
 	unsigned char buff[10];
 	int x;
-    printf("\nsendAddr addr:  %lld\n", addr);
-	for (x=0; x<noBytes; x++) {
-		buff[x]=addr&0xff;
-		addr=addr>>8;
+	printf("\nsendAddr addr:  %lld\n", addr);
+	for (x = 0; x < noBytes; x++)
+	{
+		buff[x] = addr & 0xff;
+		addr = addr >> 8;
 	}
-    
-   //  buff[0] = addr & 0xff;
-  //   buff[1] = (addr >> 8)  & 0xff;
-   //  buff[2] = (addr >> 16) & 0xff;
-   //  buff[3] = (addr >> 24) & 0xff;
-  //   buff[4] = (addr >> 32) & 0xff;
- //    buff[4] = buff[4] - 0xff;
 
-    
-//    buff[4] = 0x10;
-    
+	//  buff[0] = addr & 0xff;
+	//   buff[1] = (addr >> 8)  & 0xff;
+	//  buff[2] = (addr >> 16) & 0xff;
+	//  buff[3] = (addr >> 24) & 0xff;
+	//   buff[4] = (addr >> 32) & 0xff;
+	//    buff[4] = buff[4] - 0xff;
 
-    
-    printf("sendAddr noBytes:  %i\n", noBytes);
-    printf("sendAddr Buf:  ");
-    for (x=0; x<noBytes; x++) printf("%02hhx %s", buff[x], ((x&15)==15)?"\n":"");
-    printf("\n");
+	//    buff[4] = 0x10;
 
-	return nandWrite(0, 1, (char*) buff, noBytes);
+	printf("sendAddr noBytes:  %i\n", noBytes);
+	printf("sendAddr Buf:  ");
+	for (x = 0; x < noBytes; x++)
+		printf("%02hhx %s", buff[x], ((x & 15) == 15) ? "\n" : "");
+	printf("\n");
+
+	return nandWrite(0, 1, (char *)buff, noBytes);
 }
 
 //Write data to the flash.
-int FtdiNand::writeData(char *data, int count) {
+int FtdiNand::writeData(char *data, int count)
+{
 	return nandWrite(0, 0, data, count);
 }
 
 //Read data from the flash.
-int FtdiNand::readData(char *data, int count) {
+int FtdiNand::readData(char *data, int count)
+{
 	return nandRead(0, 0, data, count);
 }
 
@@ -199,31 +234,38 @@ int FtdiNand::readData(char *data, int count) {
 #define TIMEOUT_RETRIES 15
 
 //Waits till the R-/B-line to go high
-int FtdiNand::waitReady() {
-	unsigned char cmd=GET_BITS_HIGH;
+int FtdiNand::waitReady()
+{
+	unsigned char cmd = GET_BITS_HIGH;
 	unsigned char resp;
 	int x;
-	if (m_rbErrorCount==-1) return 1; //Too many timeouts -> don't check R/B-pin
+	if (m_rbErrorCount == -1)
+		return 1; //Too many timeouts -> don't check R/B-pin
 
-	for (x=0; x<TIMEOUT_MSEC; x++) {
+	for (x = 0; x < TIMEOUT_MSEC; x++)
+	{
 		//Send the command to read the IO-lines
-		if (ftdi_write_data(&m_ftdi, &cmd, 1)<0) return error("writing cmd");
+		if (ftdi_write_data(&m_ftdi, &cmd, 1) < 0)
+			return error("writing cmd");
 		//Read response
-		if (ftdi_read_data(&m_ftdi, &resp, 1)<=0) return error("writing cmd");
+		if (ftdi_read_data(&m_ftdi, &resp, 1) <= 0)
+			return error("writing cmd");
 		//Return if R/B-line is high (=ready)
-		if (resp&2) return 1;
-	#ifdef WIN32
+		if (resp & 2)
+			return 1;
+#ifdef WIN32
 		Sleep(1);
-	#else
+#else
 		usleep(1000);
-	#endif
+#endif
 	}
 	printf("Timeout on R/B-pin; chip seems busy for too long!\n");
 	m_rbErrorCount++;
-	if (m_rbErrorCount>TIMEOUT_RETRIES) {
+	if (m_rbErrorCount > TIMEOUT_RETRIES)
+	{
 		printf("WARNING: Too many R/B-pin timeouts. Going to ignore this pin for now.\n");
 		printf("DOUBLE CHECK IF THE CHIP IS READ OR WRITTEN CORRECTLY!\n");
-		m_rbErrorCount=-1;
+		m_rbErrorCount = -1;
 	}
 	return 1;
 }

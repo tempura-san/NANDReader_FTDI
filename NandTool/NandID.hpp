@@ -5,8 +5,8 @@
 using namespace std;
 #include "FtdiNand.hpp"
 
-
-class NandID {
+class NandID
+{
 public:
 	NandID(FtdiNand *fn, unsigned char *idbytes);
 	string getManufacturer();
@@ -16,9 +16,10 @@ public:
 	int getOobSize();
 	bool isLargePage();
 	int getAddrByteCount();
-	unsigned char* getID();
-#pragma pack(push,1)
-	struct ONFI_Param {
+	unsigned char *getID();
+#pragma pack(push, 1)
+	struct ONFI_Param
+	{
 		struct rev_info
 		{
 			unsigned int magic;
@@ -48,8 +49,8 @@ public:
 			unsigned char luns;
 			struct addr_cyc
 			{
-				unsigned char percol:4;
-				unsigned char perrow:4;
+				unsigned char percol : 4;
+				unsigned char perrow : 4;
 			};
 			addr_cyc addrcyc;
 			unsigned char bitspercell;
@@ -87,8 +88,10 @@ public:
 	};
 #pragma pack(pop)
 	ONFI_Param m_onfi;
+
 private:
-	typedef struct {
+	typedef struct
+	{
 		const char *name;
 		unsigned char id;
 		int pagesize;
@@ -101,7 +104,7 @@ private:
 
 	static const DevCodes m_devCodes[];
 	unsigned char m_idBytes[8];
-	
+
 	string m_nandManuf;
 	string m_nandDesc;
 	int m_nandPageSz;

@@ -19,36 +19,38 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include <stdio.h>
 #include <cstdlib>
 #include "NandData.hpp"
 
 //Generic NAND data interface.
 
-NandData::NandData(FtdiNand *ftdi, NandID *id) {
-	m_ft=ftdi;
-	m_id=id;
+NandData::NandData(FtdiNand *ftdi, NandID *id)
+{
+	m_ft = ftdi;
+	m_id = id;
 }
 
-int NandData::readPage(int pageno, char *buf, int max) {
+int NandData::readPage(int pageno, char *buf, int max)
+{
 	printf("readPage not supported for this device type.\n");
 	exit(0);
 }
 
-int NandData::readOob(int pageno, char *buf, int max){
+int NandData::readOob(int pageno, char *buf, int max)
+{
 	printf("readOob not supported for this device type.\n");
 	exit(0);
 }
 
-int NandData::writePage(int pageno, char *buf, int len){
+int NandData::writePage(int pageno, char *buf, int len)
+{
 	printf("writePage not supported for this device type.\n");
 	exit(0);
 }
 
-int NandData::eraseBlock(int block){
+int NandData::eraseBlock(int block)
+{
 	printf("erasePage not supported for this device type.\n");
 	exit(0);
 }
-
-

@@ -17,64 +17,70 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "NandDataLP.hpp"
 #include "NandCmds.h"
 #include <stdio.h>
 
 //Data interface for large-page NAND chips
 
-NandDataLP::NandDataLP(FtdiNand *ftdi, NandID *id) :
- NandData(ftdi, id) {
+NandDataLP::NandDataLP(FtdiNand *ftdi, NandID *id) : NandData(ftdi, id)
+{
 	//NA
 }
 
-int NandDataLP::readPage(int pageno, char *buff, int max) {
+int NandDataLP::readPage(int pageno, char *buff, int max)
+{
 	//Read a page
 	m_ft->sendCmd(NAND_CMD_READ0);
-    printf("\nPageNo: %i\n", pageno);
-    long long pageis;
-    pageis = (long long) pageno << 16L;
-    printf("\nPageNo 16L: %lld\n", pageis);
+	printf("\nPageNo: %i\n", pageno);
+	long long pageis;
+	pageis = (long long)pageno << 16L;
+	printf("\nPageNo 16L: %lld\n", pageis);
 	m_ft->sendAddr(pageis, m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_READSTART);
 	m_ft->waitReady();
-	if (max>m_id->getPageSize()) max=m_id->getPageSize();
-	if (max>0x1000)
+	if (max > m_id->getPageSize())
+		max = m_id->getPageSize();
+	if (max > 0x1000)
 	{
-		int r1=m_ft->readData(buff, 0x1000);
-		if (r1<0) return r1;
-		max-=0x1000;
-		return r1+m_ft->readData(buff+0x1000, max);
+		int r1 = m_ft->readData(buff, 0x1000);
+		if (r1 < 0)
+			return r1;
+		max -= 0x1000;
+		return r1 + m_ft->readData(buff + 0x1000, max);
 	}
 	return m_ft->readData(buff, max);
 }
 
-int NandDataLP::readOob(int pageno, char *buff, int max) {
+int NandDataLP::readOob(int pageno, char *buff, int max)
+{
 	//Read the OOB for a page
 	long long pageis;
-	pageis = (long long) pageno << 16L;
+	pageis = (long long)pageno << 16L;
 	m_ft->sendCmd(NAND_CMD_READ0);
-	m_ft->sendAddr(pageis+m_id->getPageSize(), m_id->getAddrByteCount());
+	m_ft->sendAddr(pageis + m_id->getPageSize(), m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_READSTART);
 	m_ft->waitReady();
-	if (max>m_id->getOobSize()) max=m_id->getOobSize();
+	if (max > m_id->getOobSize())
+		max = m_id->getOobSize();
 	return m_ft->readData(buff, max);
 }
 
-int NandDataLP::writePage(int pageno, char *buff, int len) {
+int NandDataLP::writePage(int pageno, char *buff, int len)
+{
 	// Write page
 	long long pageis;
-	pageis = (long long) pageno << 16L;
+	pageis = (long long)pageno << 16L;
 	m_ft->sendCmd(NAND_CMD_SEQIN);
 	m_ft->sendAddr(pageis, m_id->getAddrByteCount());
-	m_ft->writeData(buff,len);
+	m_ft->writeData(buff, len);
 	m_ft->sendCmd(NAND_CMD_PAGEPROG);
 	m_ft->waitReady();
 	return !(m_ft->status() & NAND_STATUS_FAIL);
 }
 
-int NandDataLP::eraseBlock(int pageno) {
+int NandDataLP::eraseBlock(int pageno)
+{
 	m_ft->sendCmd(NAND_CMD_ERASE1);
 	m_ft->sendAddr(pageno, m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_ERASE2);

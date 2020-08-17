@@ -7,20 +7,23 @@
 
 using namespace std;
 
-class NandChip {
+class NandChip
+{
 public:
 	NandChip(FtdiNand *fn);
 	~NandChip();
-	enum AccessType {
-		accessNone=0,
-		accessMain=1,
-		accessOob=2,
-		accessBoth=3
+	enum AccessType
+	{
+		accessNone = 0,
+		accessMain = 1,
+		accessOob = 2,
+		accessBoth = 3
 	};
 	void showInfo();
 	int readPage(int page, char *buff, int count, AccessType access);
 	int writePage(int page, char *buff, int count, AccessType access);
 	NandID *getIdPtr();
+
 public:
 	FtdiNand *m_fn;
 	NandID *m_id;

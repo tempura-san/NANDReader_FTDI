@@ -17,69 +17,74 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "NandDataSP.hpp"
 #include "NandCmds.h"
 
 //Data handler for a small-page flash.
 
-NandDataSP::NandDataSP(FtdiNand *ftdi, NandID *id) :
- NandData(ftdi, id) {
+NandDataSP::NandDataSP(FtdiNand *ftdi, NandID *id) : NandData(ftdi, id)
+{
 	//NA
 }
 
-int NandDataSP::readPage(int pageno, char *buff, int max) {
+int NandDataSP::readPage(int pageno, char *buff, int max)
+{
 	//Read a page
 	int n;
 	m_ft->sendCmd(NAND_CMD_READ0);
-	m_ft->sendAddr(pageno<<8L, m_id->getAddrByteCount());
+	m_ft->sendAddr(pageno << 8L, m_id->getAddrByteCount());
 	m_ft->waitReady();
-	n=m_ft->readData(buff, max>256?256:max);
-	max-=256;
+	n = m_ft->readData(buff, max > 256 ? 256 : max);
+	max -= 256;
 	m_ft->sendCmd(NAND_CMD_READ1);
-	m_ft->sendAddr(pageno<<8L, m_id->getAddrByteCount());
+	m_ft->sendAddr(pageno << 8L, m_id->getAddrByteCount());
 	m_ft->waitReady();
-	n+=m_ft->readData(buff+256, max>256?256:max);
+	n += m_ft->readData(buff + 256, max > 256 ? 256 : max);
 	return n;
 }
 
-int NandDataSP::readOob(int pageno, char *buff, int max) {
+int NandDataSP::readOob(int pageno, char *buff, int max)
+{
 	//Read the OOB for a page
 	m_ft->sendCmd(NAND_CMD_READOOB);
-	m_ft->sendAddr(pageno<<8L, m_id->getAddrByteCount());
+	m_ft->sendAddr(pageno << 8L, m_id->getAddrByteCount());
 	m_ft->waitReady();
 	return m_ft->readData(buff, max);
 }
 
-int NandDataSP::writePage(int pageno, char *buff, int len) {
-	unsigned char err=0;
+int NandDataSP::writePage(int pageno, char *buff, int len)
+{
+	unsigned char err = 0;
 	m_ft->sendCmd(NAND_CMD_READ0);
 	m_ft->sendCmd(NAND_CMD_SEQIN);
-	m_ft->sendAddr(pageno<<8L, m_id->getAddrByteCount());
-	m_ft->writeData(buff,len>256?256:len);
-	len-=256;
+	m_ft->sendAddr(pageno << 8L, m_id->getAddrByteCount());
+	m_ft->writeData(buff, len > 256 ? 256 : len);
+	len -= 256;
 	m_ft->sendCmd(NAND_CMD_PAGEPROG);
 	m_ft->waitReady();
-	if ((err=m_ft->status()) & NAND_STATUS_FAIL) return err;
+	if ((err = m_ft->status()) & NAND_STATUS_FAIL)
+		return err;
 
 	m_ft->sendCmd(NAND_CMD_READ1);
 	m_ft->sendCmd(NAND_CMD_SEQIN);
-	m_ft->sendAddr(pageno<<8L, m_id->getAddrByteCount());
-	m_ft->writeData(buff+256,len>256?256:len);
-	len-=256;
+	m_ft->sendAddr(pageno << 8L, m_id->getAddrByteCount());
+	m_ft->writeData(buff + 256, len > 256 ? 256 : len);
+	len -= 256;
 	m_ft->sendCmd(NAND_CMD_PAGEPROG);
 	m_ft->waitReady();
-	if ((err=m_ft->status()) & NAND_STATUS_FAIL) return err;
+	if ((err = m_ft->status()) & NAND_STATUS_FAIL)
+		return err;
 
 	m_ft->sendCmd(NAND_CMD_READOOB);
 	m_ft->sendCmd(NAND_CMD_SEQIN);
-	m_ft->sendAddr(pageno<<8L, m_id->getAddrByteCount());
-	m_ft->writeData(buff+512,len>16?16:len);
+	m_ft->sendAddr(pageno << 8L, m_id->getAddrByteCount());
+	m_ft->writeData(buff + 512, len > 16 ? 16 : len);
 	m_ft->waitReady();
 	return !(m_ft->status() & NAND_STATUS_FAIL);
 }
 
-int NandDataSP::eraseBlock(int pageno) {
+int NandDataSP::eraseBlock(int pageno)
+{
 	m_ft->sendCmd(NAND_CMD_ERASE1);
 	m_ft->sendAddr(pageno, m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_ERASE2);
@@ -87,4 +92,3 @@ int NandDataSP::eraseBlock(int pageno) {
 	m_ft->status();
 	return !(m_ft->status() & NAND_STATUS_FAIL);
 }
-
