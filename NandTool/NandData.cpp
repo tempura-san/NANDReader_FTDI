@@ -33,24 +33,38 @@ NandData::NandData(FtdiNand *ftdi, NandID *id)
 
 int NandData::readPage(int pageno, char *buf, int max)
 {
+	(void)pageno;
+	(void)buf;
+	(void)max;
+
 	printf("readPage not supported for this device type.\n");
 	exit(0);
 }
 
 int NandData::readOob(int pageno, char *buf, int max)
 {
+	(void)pageno;
+	(void)buf;
+	(void)max;
+
 	printf("readOob not supported for this device type.\n");
 	exit(0);
 }
 
 int NandData::writePage(int pageno, char *buf, int len)
 {
+	(void)pageno;
+	(void)buf;
+	(void)len;
+
 	printf("writePage not supported for this device type.\n");
 	exit(0);
 }
 
 int NandData::eraseBlock(int block)
 {
-	printf("erasePage not supported for this device type.\n");
+	(void)block;
+
+	printf("eraseBlock not supported for this device type.\n");
 	exit(0);
 }

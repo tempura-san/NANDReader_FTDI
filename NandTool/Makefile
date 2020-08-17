@@ -4,7 +4,7 @@ RM = /bin/rm -f
 
 LIBNAME=libftdi1
 
-CFLAGS = -c -O3 -g -ggdb -Wall -Wextra -Wno-unused-parameter
+CFLAGS = -c -O3 -g -ggdb -Wall -Wextra
 CFLAGS += $(shell pkg-config --cflags $(LIBNAME))
 
 LDFLAGS = $(shell pkg-config --libs $(LIBNAME))
