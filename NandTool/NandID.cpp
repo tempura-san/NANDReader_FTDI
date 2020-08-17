@@ -18,9 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "NandID.hpp"
-#include <stdio.h>
-#include <stdlib.h>
 #include "NandCmds.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
 
 #define NAND_MFR_TOSHIBA 0x98
 #define NAND_MFR_SAMSUNG 0xec
@@ -158,13 +161,17 @@ static int nand_id_len(unsigned char *id_data, int arrlen)
 	return arrlen;
 }
 
-//Constructor: construct NAND ID info from the 5 ID bytes read from the NAND.
-NandID::NandID(FtdiNand *fn, unsigned char *idBytes)
+//Constructor: construct NAND ID info from the ID bytes read from the NAND.
+NandID::NandID(unsigned char *idBytes)
 {
 	int x;
+	int id_len;
+
+	memset(m_idBytes, 0, MAXIDLEN);
+	id_len = nand_id_len(idBytes, MAXIDLEN);
 
 	printf("Read NAND ID bytes:");
-	for (x = 0; x < 5; x++)
+	for (x = 0; x < id_len; x++)
 	{
 		m_idBytes[x] = idBytes[x];
 		printf(" %02hhX", m_idBytes[x]);
@@ -181,40 +188,10 @@ NandID::NandID(FtdiNand *fn, unsigned char *idBytes)
 	}
 
 	m_nandDesc = m_devCodes[x].name;
-
-	//unsigned char onfi[4]={0};
-	fn->sendCmd(NAND_CMD_READID);
-	/*fn->sendAddr(0x20, 1);
-	fn->readData((char *)onfi, 4);
-	m_onfib=(onfi[0]=='O' && onfi[1]=='N' && onfi[2]=='F' && onfi[3]=='I')?true:false;
-	if (m_onfib)
-	{
-		fn->sendCmd(NAND_CMD_ONFI);
-		fn->sendAddr(0, 1);
-		fn->waitReady();
-		fn->readData((char*)&m_onfi, 0x100);
-		if (m_onfi.rev.magic==0x49464E4F) m_onfib=true;
-		else m_onfib=false;
-	}
-     */
-	m_onfib = false;
 	m_nandChipSzMB = m_devCodes[x].chipsizeMB;
 	m_nandIsLP = ((m_devCodes[x].options & LP_OPTIONS) != 0);
-	/*if (m_devCodes[x].pagesize!=0) {
-		//Page/erasesize is device-specific
-		m_nandPageSz=m_devCodes[x].pagesize;
-		m_nandEraseSz=m_devCodes[x].erasesize;
-		m_nandOobSz=(m_nandPageSz==512)?16:8;
-	} else {
-		//Page/erasesize is encoded in 3/4/5th ID-byte
-		int i;
-		i=idBytes[3]&3;
-		m_nandPageSz=1024<<i;
-		i=(idBytes[3]>>4)&3;
-		m_nandEraseSz=(64*1024)<<i;
-		m_nandOobSz=((idBytes[3]&4)?16:8)*(m_nandPageSz/512);
-	}*/
 
+	// Calculate the device parameters if not given (hardcoded)
 	if (m_devCodes[x].pagesize == 0)
 	{
 		int ext_id = idBytes[3];
@@ -227,8 +204,6 @@ NandID::NandID(FtdiNand *fn, unsigned char *idBytes)
 		 * Check for ID length, non-zero 6th byte, cell type, and Hynix/Samsung
 		 * ID to decide what to do.
 		 */
-		int id_len = nand_id_len(idBytes, 8); //(idBytes[0] == idBytes[6]) && (idBytes[1] == idBytes[7])?6:4;
-
 		if ((id_len == 6) && (idBytes[0] == NAND_MFR_SAMSUNG) && (idBytes[2] & NAND_CI_CELLTYPE_MSK) && (idBytes[5] != 0x00))
 		{
 			m_nandPageSz = 2048UL << (ext_id & 3);
@@ -394,21 +369,4 @@ unsigned char *NandID::getID()
 int NandID::getAddrByteCount()
 {
 	return m_nandaddrcyc;
-	/*int cyc;
-	if (m_nandIsLP) {
-		if (m_nandChipSzMB>=32768) {
-			cyc=6;
-		} else if (m_nandChipSzMB>=128) {
-			cyc=5;
-		} else {
-			cyc=4;
-		}
-	} else {
-		if (m_nandChipSzMB>128) { //>=64 ???
-			cyc=3;
-		} else {
-			cyc=4;
-		}
-	}
-	return cyc;*/
 }

@@ -19,28 +19,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "NandChip.hpp"
+#include "NandID.hpp"
+#include "NandCmds.h"
 #include "NandData.hpp"
 #include "NandDataLP.hpp"
 #include "NandDataSP.hpp"
-#include <stdio.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <cstdlib>
 #include <unistd.h>
-#include "NandCmds.h"
+
+#include <cstdio>
+#include <cstdlib>
+using namespace std;
 
 NandChip::NandChip(FtdiNand *fn)
 {
-	unsigned char id[8];
+	unsigned char id[MAXIDLEN];
 	m_fn = fn;
-	//Try to read the 5 NAND ID-bytes and create the ID-object
+	//Try to read the NAND ID-bytes and create the ID-object
 	m_fn->sendCmd(NAND_CMD_RESET);
 	usleep(10000);
 	m_fn->sendCmd(NAND_CMD_READID);
 	m_fn->sendAddr(0, 1);
-	m_fn->readData((char *)id, 8);
-	m_id = new NandID(fn, id);
+	m_fn->readData((char *)id, MAXIDLEN);
+	m_id = new NandID(id);
 	//We use a different data object for large- and small-page devices
 	if (m_id->isLargePage())
 	{
