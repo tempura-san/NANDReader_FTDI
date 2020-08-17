@@ -115,6 +115,8 @@ int FtdiNand::nandWrite(int cl, int al, char *buf, int count)
 		}
 		cmds[i++] = buf[x];
 	}
+
+#ifdef DEBUG
 	printf("nandWrite Buf: ");
 	for (x = 0; x < count; x++)
 		printf("%02hhx %s", buf[x], ((x & 15) == 15) ? "\n" : "");
@@ -122,10 +124,7 @@ int FtdiNand::nandWrite(int cl, int al, char *buf, int count)
 	printf("Cmd:\n");
 	for (x = 0; x < i; x++)
 		printf("%02hhx %s", cmds[x], ((x & 15) == 15) ? "\n" : "");
-
-	//	printf("Cmd:\n");
-	//	for (x=0; x<i; x++) printf("%02hhx %s", cmds[x], ((x&15)==15)?"\n":"");
-	//	printf("\n\n");
+#endif
 
 	if (ftdi_write_data(&m_ftdi, cmds, i) < 0)
 		return error("writing cmd");
@@ -192,27 +191,24 @@ int FtdiNand::sendAddr(long long addr, int noBytes)
 {
 	unsigned char buff[10];
 	int x;
+
+#ifdef DEBUG
 	printf("\nsendAddr addr:  %lld\n", addr);
+	printf("sendAddr noBytes:  %i\n", noBytes);
+#endif
+
 	for (x = 0; x < noBytes; x++)
 	{
 		buff[x] = addr & 0xff;
 		addr = addr >> 8;
 	}
 
-	//  buff[0] = addr & 0xff;
-	//   buff[1] = (addr >> 8)  & 0xff;
-	//  buff[2] = (addr >> 16) & 0xff;
-	//  buff[3] = (addr >> 24) & 0xff;
-	//   buff[4] = (addr >> 32) & 0xff;
-	//    buff[4] = buff[4] - 0xff;
-
-	//    buff[4] = 0x10;
-
-	printf("sendAddr noBytes:  %i\n", noBytes);
+#ifdef DEBUG
 	printf("sendAddr Buf:  ");
 	for (x = 0; x < noBytes; x++)
 		printf("%02hhx %s", buff[x], ((x & 15) == 15) ? "\n" : "");
 	printf("\n");
+#endif
 
 	return nandWrite(0, 1, (char *)buff, noBytes);
 }

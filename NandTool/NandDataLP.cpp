@@ -32,10 +32,12 @@ int NandDataLP::readPage(int pageno, char *buff, int max)
 {
 	//Read a page
 	m_ft->sendCmd(NAND_CMD_READ0);
-	printf("\nPageNo: %i\n", pageno);
 	long long pageis;
 	pageis = (long long)pageno << 16L;
+#ifdef DEBUG
+	printf("\nPageNo: %i\n", pageno);
 	printf("\nPageNo 16L: %lld\n", pageis);
+#endif
 	m_ft->sendAddr(pageis, m_id->getAddrByteCount());
 	m_ft->sendCmd(NAND_CMD_READSTART);
 	m_ft->waitReady();
